@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZipByte | Future of Commerce</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- Futuristic Variables --- */
+        :root {
+            --bg-color: #030712; 
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-cyan: #06b6d4; 
+            --accent-purple: #8b5cf6; 
+            --accent-green: #10b981; /* Green for Purpose/Sustainability */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* --- Background Grid Effect --- */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* --- Navigation --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background: rgba(3, 7, 18, 0.7);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            margin-left: 2rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+        .nav-links a:hover { color: var(--accent-cyan); text-shadow: 0 0 8px var(--accent-cyan); }
+
+        /* --- Hero Section --- */
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(0,0,0,0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            max-width: 900px;
+        }
+
+        .hero h1 span {
+            display: block;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .highlight {
+            color: var(--accent-cyan);
+            -webkit-text-fill-color: var(--accent-cyan) !important;
+            text-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 3.5rem;
+            max-width: 600px;
+        }
+
+        /* --- Buttons --- */
+        .demo-options { display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center; }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-seller {
+            background: transparent;
+            border: 1px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.1);
+        }
+        .btn-seller:hover { background: var(--accent-cyan); color: #000; box-shadow: 0 0 30px rgba(6, 182, 212, 0.6); }
+
+        .btn-buyer {
+            background: transparent;
+            border: 1px solid var(--accent-purple);
+            color: var(--accent-purple);
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.1);
+        }
+        .btn-buyer:hover { background: var(--accent-purple); color: #fff; box-shadow: 0 0 30px rgba(139, 92, 246, 0.6); }
+
+        /* --- Sections --- */
+        .section { padding: 6rem 10%; text-align: center; }
+        .section h2 { font-size: 2.5rem; margin-bottom: 3rem; color: #fff; }
+        .section h2 span { color: var(--text-secondary); font-weight: 300; }
+
+        /* --- ABOUT SECTION --- */
+        .about-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 3rem;
+            backdrop-filter: blur(10px);
+            text-align: left;
+        }
+        .about-header { font-size: 2rem; margin-bottom: 1.5rem; color: var(--text-primary); }
+        .about-text { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 2rem; }
+        
+        .about-values {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid var(--glass-border);
+            padding-top: 2rem;
+        }
+        .value-item h4 { color: var(--accent-cyan); font-size: 1.2rem; margin-bottom: 0.5rem; }
+        .value-item p { color: var(--text-secondary); font-size: 0.9rem; }
+
+        /* --- PURPOSE SECTION --- */
+        .purpose-container {
+            max-width: 900px;
+            margin: 0 auto;
+            /* Green tint for purpose/nature */
+            background: radial-gradient(circle at top right, rgba(16, 185, 129, 0.05), transparent 60%), var(--glass-bg);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 24px;
+            padding: 3rem;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+        
+        .purpose-quote {
+            font-size: 1.4rem;
+            color: #fff;
+            font-weight: 300;
+            font-style: italic;
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+        
+        .purpose-text {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* --- Ecosystem Split --- */
+        .split-container { display: flex; flex-wrap: wrap; gap: 3rem; justify-content: center; text-align: left; }
+
+        .value-card {
+            flex: 1;
+            min-width: 320px;
+            padding: 2.5rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        .value-card:hover { transform: translateY(-5px); }
+        .value-card.seller { border-top: 4px solid var(--accent-cyan); }
+        .value-card.buyer { border-top: 4px solid var(--accent-purple); }
+        
+        .value-card h3 { font-size: 1.8rem; margin-bottom: 0.5rem; color: #fff; }
+        .value-card .subtitle { color: var(--text-secondary); margin-bottom: 2rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        .value-list { list-style: none; }
+        .value-list li { margin-bottom: 1.2rem; display: flex; align-items: flex-start; gap: 12px; color: var(--text-secondary); }
+        .value-list li strong { color: var(--text-primary); font-weight: 600; }
+        .icon-box { 
+            width: 24px; height: 24px; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.8rem; font-weight: bold;
+        }
+        .seller .icon-box { background: rgba(6, 182, 212, 0.2); color: var(--accent-cyan); }
+        .buyer .icon-box { background: rgba(139, 92, 246, 0.2); color: var(--accent-purple); }
+
+        /* --- Logistics Banner --- */
+        .logistics-banner {
+            width: 100%;
+            padding: 5rem 10%;
+            background: linear-gradient(90deg, rgba(6, 182, 212, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+            border-top: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
+            text-align: center;
+            margin: 4rem 0;
+        }
+        .stats-container { display: flex; justify-content: space-around; flex-wrap: wrap; margin-top: 3rem; gap: 2rem; }
+        .stat-item h4 { font-size: 3rem; color: #fff; line-height: 1; margin-bottom: 0.5rem; }
+        .stat-item p { color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; }
+
+        /* --- Features Grid --- */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            text-align: left;
+        }
+
+        .feature-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 2.5rem;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s;
+        }
+        .feature-card:hover { transform: translateY(-5px); border-color: var(--accent-cyan); }
+        .feature-card h3 { margin-bottom: 1rem; font-size: 1.5rem; color: var(--text-primary); }
+        .feature-card p { color: var(--text-secondary); font-size: 1rem; }
+
+        /* --- Footer --- */
+        footer {
+            background-color: #020617;
+            border-top: 1px solid var(--glass-border);
+            padding: 4rem 5%;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+        footer h2 { color: var(--text-primary); margin-bottom: 1rem; }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .btn { width: 100%; justify-content: center; }
+            .split-container, .about-values { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">ZIPBYTE</div>
+        <div class="nav-links">
+            <a href="#about">About</a>
+            <a href="#purpose">Purpose</a>
+            <a href="#ecosystem">Solutions</a>
+            <a href="#contact">Access</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h1>
+            <span>Next Gen Commerce.</span>
+            <span class="highlight">Seamless Experience.</span>
+        </h1>
+        <p>Empowering FPOs, Sellers, and Industries with an AI-integrated ecosystem. Experience the full simulation before launch.</p>
+        
+        <div class="demo-options">
+            <a href="seller_demo.html" class="btn btn-seller">
+                <span>⚡</span> Seller Walkthrough
+            </a>
+
+            <a href="buyer_demo.html" class="btn btn-buyer">
+                <span>🚀</span> Customer Experience
+            </a>
+        </div>
+    </header>
+
+    <section id="about" class="section" style="padding-bottom: 2rem;">
+        <div class="about-container">
+            <h2 class="about-header">Built for the Soil. <br>Designed for the Cloud.</h2>
+            
+            <p class="about-text">
+                Agriculture is the backbone of our world, yet the bridge between farmers and industries has remained uncertain for too long. 
+                At <strong>ZipByte</strong>, we are rewriting the rules of wholesale trade.
+            </p>
+            
+            <div class="about-values">
+                <div class="value-item">
+                    <h4>Our Mission</h4>
+                    <p>To digitize 10,000+ FPOs and create a transparent, borderless marketplace for fresh produce.</p>
+                </div>
+                <div class="value-item">
+                    <h4>Fair Service Model</h4>
+                    <p>We charge a transparent service fee for market access, ensuring sustainability for us and value for you.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="purpose" class="section">
+        <div class="purpose-container">
+            <h2 style="color: var(--accent-green);">Our Purpose</h2>
+            
+            <div class="purpose-quote">
+                "Our determination is to eliminate food waste caused by low market access. We are here to contribute to a world without hunger, ensuring that quality food reaches every person on Earth."
+            </div>
+
+            <p class="purpose-text">
+                We are solving the uncertainty of selling harvest. By giving Retailers direct access to Farmers, we ensure fresh produce is served to end customers efficiently. This isn't just business; it's about making the world a better place.
+            </p>
+        </div>
+    </section>
+
+    <section id="ecosystem" class="section">
+        <h2>Connecting <span>Core to Commerce</span></h2>
+        <div class="split-container">
+            <div class="value-card seller">
+                <h3>For FPOs & Farmers</h3>
+                <p class="subtitle">Maximize Yield Revenue</p>
+                <ul class="value-list">
+                    <li>
+                        <div class="icon-box">✓</div>
+                        <div><strong>Direct Market Access</strong><br>Skip the middlemen. Sell directly to industries.</div>
+                    </li>
+                    <li>
+                        <div class="icon-box">✓</div>
+                        <div><strong>Automated Logistics</strong><br>We handle the shipping. You focus on farming.</div>
+                    </li>
+                    <li>
+                        <div class="icon-box">✓</div>
+                        <div><strong>Premium Access</strong><br>Unlock high-value buyers through our dedicated platform.</div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="value-card buyer">
+                <h3>For Industries & Buyers</h3>
+                <p class="subtitle">Optimized Procurement</p>
+                <ul class="value-list">
+                    <li>
+                        <div class="icon-box">✓</div>
+                        <div><strong>Bulk Sourcing</strong><br>Secure tons of produce with a single click.</div>
+                    </li>
+                    <li>
+                        <div class="icon-box">✓</div>
+                        <div><strong>Verified Quality</strong><br>All sellers are verified FPOs and farmers.</div>
+                    </li>
+                    <li>
+                        <div class="icon-box">✓</div>
+                        <div><strong>Traceability</strong><br>Track your order from farm to warehouse.</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <div class="logistics-banner">
+        <h2>Smart Logistics Network</h2>
+        <p style="max-width: 600px; margin: 0 auto; color: var(--text-secondary);">
+            Our integrated shipping solution ensures freshness from pickup to delivery. 
+            Experience the logic flow in our Seller Demo.
+        </p>
+        <div class="stats-container">
+            <div class="stat-item">
+                <h4>24h</h4>
+                <p>Dispatch Time</p>
+            </div>
+            <div class="stat-item">
+                <h4>100%</h4>
+                <p>Traceable</p>
+            </div>
+            <div class="stat-item">
+                <h4>Fair</h4>
+                <p>Service Fees</p>
+            </div>
+        </div>
+    </div>
+
+    <section id="features" class="section">
+        <h2>System Capabilities</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>Merchant Dashboard</h3>
+                <p>Streamlined onboarding for FPOs and Sellers. AI-assisted listing and automated shipping logistics integration.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Consumer Interface</h3>
+                <p>A friction-less buying experience. Intuitive search, secure Razorpay integration, and real-time tracking.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Verified Ecosystem</h3>
+                <p>Automated GST and document verification ensures a secure and trusted marketplace for industries and retailers.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <h2>Join the Beta</h2>
+        <p>Be the first to experience ZipByte.</p>
+        <br>
+        <p style="color: var(--accent-cyan);">contact@zipbyte.com</p>
+        <br>
+        <p>&copy; 2025 ZipByte. All Systems Operational.</p>
+    </footer>
+
+</body>
+</html>
