@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logistics Demo | ZipByte</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- Shared Styles --- */
+        :root {
+            --bg-color: #030712;
+            --accent-green: #10b981; /* Green for Logistics/Success */
+            --accent-purple: #8b5cf6; /* Brand Color */
+            --text-primary: #f8fafc;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 5px;
+            overflow: hidden;
+            /* Green/Purple background glow */
+            background-image: radial-gradient(circle at 80% 80%, rgba(16, 185, 129, 0.15) 0%, transparent 50%),
+                              radial-gradient(circle at 20% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 50%);
+        }
+
+        /* --- The Phone Frame --- */
+        .device-frame {
+            width: 340px;
+            height: 690px;
+            background: #0f172a;
+            border: 8px solid #1e293b;
+            border-radius: 40px;
+            box-shadow: 0 0 50px rgba(16, 185, 129, 0.1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Screens --- */
+        .screen {
+            width: 100%;
+            height: 100%;
+            display: none;
+            position: relative;
+        }
+        .screen.active { 
+            display: block; 
+            animation: fadeIn 0.4s ease; 
+        }
+        
+        .app-screenshot {
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+            display: block;
+        }
+
+        .app-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* --- Hotspots --- */
+        .hotspot {
+            position: absolute;
+            cursor: pointer;
+            z-index: 100;
+        }
+
+        /* --- Blinker (Green for Shipping) --- */
+        .blinker {
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--accent-green);
+            border-radius: 12px;
+            animation: pulse 1.5s infinite;
+            background: rgba(16, 185, 129, 0.1);
+            pointer-events: none;
+        }
+
+        @keyframes pulse { 
+            0% { transform: scale(0.95); opacity: 1; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1.05); opacity: 0; box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); opacity: 0; }
+        }
+
+        /* Guide Text Box */
+        .guide-box {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.9);
+            padding: 12px 24px;
+            border-radius: 30px;
+            border: 1px solid var(--accent-green);
+            color: var(--accent-green);
+            font-size: 0.9rem;
+            text-align: center;
+            width: 85%;
+            pointer-events: none;
+            z-index: 200;
+        }
+        
+        /* --- Outro Page Styles --- */
+        .outro-container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(to bottom, #0f172a, #020617);
+            position: relative;
+            z-index: 10;
+        }
+
+        .glow-circle {
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.4) 0%, transparent 70%);
+            z-index: -1;
+            animation: pulseGlow 3s infinite ease-in-out;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+            50% { opacity: 1; transform: translateX(-50%) scale(1.2); }
+        }
+        .outro-container h1 { font-size: 2.2rem; margin-bottom: 20px; line-height: 1.1; }
+        .outro-text { font-size: 1.1rem; color: #e2e8f0; margin-bottom: 20px; }
+        .btn-group { display: flex; flex-direction: column; gap: 15px; width: 100%; }
+        
+        .btn-primary {
+            background: var(--accent-green);
+            color: #000;
+            padding: 15px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+            display: block;
+        }
+        .btn-secondary {
+            background: transparent;
+            color: #94a3b8;
+            border: 1px solid #334155;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        .btn-secondary:hover { color: var(--accent-green); border-color: var(--accent-green); }
+    </style>
+</head>
+<body>
+
+    <div class="device-frame">
+
+        <div class="screen active" id="step1">
+            <img src="Seller_page01.png" alt="Seller Dashboard" class="app-screenshot">
+            <div class="hotspot" style="top: 60%; right: 20px; width: 100px; height: 40px;" onclick="nextStep(2)">
+                <div class="blinker"></div>
+            </div>
+            <div class="guide-box">You have a new order! Click "Pending" to view.</div>
+        </div>
+
+        <div class="screen" id="step2">
+            <img src="order_details01.png" alt="Order Details" class="app-screenshot">
+            <div class="hotspot" style="top: 56%; left: 50%; transform: translateX(-50%); width: 90%; height: 50px;" onclick="nextStep(3)">
+                <div class="blinker"></div>
+            </div>
+            <div class="guide-box">Review the item. Click "Delivery information".</div>
+        </div>
+
+        <div class="screen" id="step3">
+            <img src="Delivery_info.png" alt="Delivery Menu" class="app-screenshot">
+            <div class="hotspot" style="top: 25%; left: 50%; transform: translateX(-50%); width: 100%; height: 60px;" onclick="nextStep(4)">
+                <div class="blinker"></div>
+            </div>
+            <div class="guide-box">Item is packed. Click "Request pickup".</div>
+        </div>
+
+        <div class="screen" id="step4">
+            <video class="app-video" autoplay muted playsinline loop>
+                <source src="pick_up.mp4" type="video/mp4">
+            </video>
+            <div id="delayed-hotspot" class="hotspot" style="display: none; bottom: 38px; left: 50%; transform: translateX(-50%); width: 150px; height: 60px;" onclick="nextStep(5)">
+                <div class="blinker"></div>
+            </div>
+            <div class="guide-box"style="bottom: 150px;">Schedule the time. Click "Request Pickup".</div>
+        </div>
+
+        <div class="screen" id="step5">
+            <img src="pickup_succes_page02.png" alt="Success" class="app-screenshot">
+            <div class="hotspot" style="top: 51%; left: 50%; transform: translateX(-50%); width: 150px; height: 50px;" onclick="nextStep(6)">
+                <div class="blinker"></div>
+            </div>
+            <div class="guide-box">Pickup Scheduled! Click "Back to Home".</div>
+        </div>
+
+        <div class="screen" id="step6">
+            <div class="outro-container">
+                <div class="glow-circle"></div>
+                <h1>Delivery <span style="color: var(--accent-green);">Solved.</span></h1>
+                <p class="outro-text">
+                    Seamless logistics integration means you focus on farming, not shipping.
+                </p>
+                <div class="btn-group">
+                    <a href="index.html" class="btn-primary">Back to Landing Page</a>
+                    <button class="btn-secondary" onclick="nextStep(1)">Replay Demo</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let timer = null; // Create a timer variable outside the function
+
+        function nextStep(stepNum) {
+          // 1. Hide all screens
+          document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+
+          // 2. Clear any old timers so they don't pop up randomly
+          if (timer) {
+            clearTimeout(timer);
+            timer = null;
+          }
+
+          // 3. Reset Step 4 Button (Hide it again)
+          const delayedHotspot = document.getElementById('delayed-hotspot');
+          if (delayedHotspot) {
+            delayedHotspot.style.display = 'none';
+          }
+
+          // 4. If we are entering Step 4 (The Video Step)
+          if (stepNum === 4) {
+            // Restart the video from 0:00
+            const vid = document.querySelector('#step4 video');
+            if (vid) {
+              vid.currentTime = 0;
+              vid.play();
+            }
+
+             // Wait 28 seconds (28000ms), then show the button
+            timer = setTimeout(() => {
+                if (delayedHotspot) delayedHotspot.style.display = 'block';
+            }, 28000); 
+          }
+
+          // 5. Show the next screen
+          const nextScreen = document.getElementById('step' + stepNum);
+          if (nextScreen) nextScreen.classList.add('active');
+        }
+    </script>
+</body>
+</html>

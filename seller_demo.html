@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Walkthrough | ZipByte</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- Shared Styles --- */
+        :root {
+            --bg-color: #030712;
+            --accent-cyan: #06b6d4; /* Cyan for Sellers */
+            --text-primary: #f8fafc;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 5px;
+            overflow: hidden;
+            background-image: radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.15) 0%, transparent 50%);
+        }
+
+        /* --- The Phone Frame --- */
+        .device-frame {
+            width: 340px;
+            height: 690px;
+            background: #0f172a;
+            border: 8px solid #1e293b;
+            border-radius: 40px;
+            box-shadow: 0 0 50px rgba(6, 182, 212, 0.2);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Screens --- */
+        .screen {
+            width: 100%;
+            height: 100%;
+            display: none;
+            position: relative;
+        }
+        .screen.active { 
+            display: block; 
+            animation: fadeIn 0.4s ease; 
+        }
+        
+        .app-screenshot {
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+            display: block;
+        }
+
+        /* Video Styles */
+        .app-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* --- Hotspots --- */
+        .hotspot {
+            position: absolute;
+            cursor: pointer;
+            z-index: 100;
+        }
+
+        /* --- Blinker (Cyan) --- */
+        .blinker {
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--accent-cyan);
+            border-radius: 12px;
+            animation: pulse 1.5s infinite;
+            background: rgba(6, 182, 212, 0.1);
+            pointer-events: none;
+        }
+
+        @keyframes pulse { 
+            0% { transform: scale(0.95); opacity: 1; box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.7); }
+            70% { transform: scale(1.05); opacity: 0; box-shadow: 0 0 0 15px rgba(6, 182, 212, 0); }
+            100% { transform: scale(0.95); opacity: 0; }
+        }
+
+        /* Guide Text Box */
+        .guide-box {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.9);
+            padding: 12px 24px;
+            border-radius: 30px;
+            border: 1px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+            font-size: 0.9rem;
+            text-align: center;
+            width: 85%;
+            pointer-events: none;
+            z-index: 200;
+        }
+        
+        /* --- Outro Page Styles --- */
+        .outro-container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(to bottom, #0f172a, #020617);
+            position: relative;
+            z-index: 10;
+        }
+
+        .glow-circle {
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.4) 0%, transparent 70%);
+            z-index: -1;
+            animation: pulseGlow 3s infinite ease-in-out;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+            50% { opacity: 1; transform: translateX(-50%) scale(1.2); }
+        }
+        .outro-container h1 { font-size: 2.2rem; margin-bottom: 20px; line-height: 1.1; }
+        .outro-text { font-size: 1.1rem; color: #e2e8f0; margin-bottom: 20px; }
+        .outro-subtext { font-size: 0.9rem; color: #94a3b8; margin-bottom: 40px; line-height: 1.6; }
+        .btn-group { display: flex; flex-direction: column; gap: 15px; width: 100%; }
+        
+        .btn-primary {
+            background: var(--accent-cyan);
+            color: #000;
+            padding: 15px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
+            transition: transform 0.2s;
+            display: block;
+        }
+        .btn-primary:active { transform: scale(0.98); }
+        
+        .btn-secondary {
+            background: transparent;
+            color: #94a3b8;
+            border: 1px solid #334155;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-secondary:hover { color: var(--accent-cyan); border-color: var(--accent-cyan); }
+    </style>
+</head>
+<body>
+
+    <div class="device-frame">
+
+        <div class="screen active" id="step1">
+            <img src="Home_page.png" alt="Home Screen" class="app-screenshot">
+            <div class="hotspot" style="bottom: 6.10px; left: 65.3%; transform: translateX(-50%); width: 80px; height: 80px;" onclick="nextStep(2)">
+                <div class="blinker" style="border-radius: 50%;"></div>
+            </div>
+            <div class="guide-box"style="bottom: 95px;">Welcome! Click "Product Selling" to begin.</div>
+        </div>
+
+        <div class="screen" id="step2">
+            <img src="Selling_page.png" alt="Selling Intro" class="app-screenshot">
+            <div class="hotspot" style="bottom: 98px; left: 50%; transform: translateX(-50%); width: 90%; height: 60px;" onclick="nextStep(3)">
+                <div class="blinker"></div>
+            </div>
+            <div class="guide-box"style="bottom: 28px;">Start your journey. Click "Sell Product".</div>
+        </div>
+
+        <div class="screen" id="step3">
+            <img src="Business_details.png" alt="Business Details" class="app-screenshot">
+            <div class="hotspot" style="top: 55%; left: 50%; transform: translateX(-50%); width: 90%; height: 60px;" onclick="nextStep(4)">
+                <div class="blinker"></div>
+            </div>
+            <div class="guide-box">Fill business info. Click "Register".</div>
+        </div>
+
+        <div class="screen" id="step4">
+            <img src="Bank_details.png" alt="Bank Details" class="app-screenshot">
+            <div class="hotspot" style="top: 58.0%; left: 50%; transform: translateX(-50%); width: 90%; height: 60px;" onclick="nextStep(5)">
+                <div class="blinker"></div>
+            </div>
+            <div class="guide-box">Add payout details. Click "Register".</div>
+        </div>
+
+        <div class="screen" id="step5">
+            <img src="verification_page.png" alt="Verification" class="app-screenshot">
+            <div class="hotspot" style="bottom: 27%; left: 50%; transform: translateX(-50%); width: 180px; height: 50px;" onclick="nextStep(6)">
+                <div class="blinker"></div>
+            </div>
+            <div class="guide-box">Verification Pending. Click to Continue.</div>
+        </div>
+
+        <div class="screen" id="step6">
+            <img src="product_listing.png" alt="Product Categories" class="app-screenshot">
+            <div class="hotspot" style="top: 39.40%; right: 10.0px; width: 60px; height: 60px;" onclick="nextStep(7)">
+                <div class="blinker" style="border-radius: 50%;"></div>
+            </div>
+            <div class="guide-box">Select a product (e.g., Seppankizhangu).</div>
+        </div>
+
+        <div class="screen" id="step7">
+            <video class="app-video" autoplay muted playsinline loop>
+                <source src="Pickup_details01.mp4" type="video/mp4">
+            </video>
+            <div class="hotspot" style="bottom: 125px; left: 50%; transform: translateX(-50%); width: 150px; height: 60px;" onclick="nextStep(8)">
+                <div class="blinker"></div>
+            </div>
+            <div class="guide-box">Review details. Click "Start Selling".</div>
+        </div>
+
+        <div class="screen" id="step8">
+            <img src="Product_listed.png" alt="Success" class="app-screenshot">
+            <div class="hotspot" style="top: 60%; left: 50%; transform: translateX(-50%); width: 150px; height: 50px;" onclick="nextStep(9)">
+                <div class="blinker"></div>
+            </div>
+            <div class="guide-box">Success! Click "Back to Home".</div>
+        </div>
+
+        <div class="screen" id="step9">
+            <img src="seller_page.png" alt="Dashboard" class="app-screenshot">
+            <div class="hotspot" style="bottom: 279px; left: 60%; transform: translateX(-50%); width: 40%; height: 45px;" onclick="nextStep(10)">
+                <div class="blinker"></div>
+            </div>
+            <div class="guide-box">Your item is live! Click pending for shipping.</div>
+        </div>
+
+        <div class="screen" id="step10">
+          <div class="outro-container">
+            <div class="glow-circle"></div>
+            <h1>Item <span style="color: var(--accent-cyan);">Listed!</span></h1>
+        
+            <p class="outro-text">
+              Great job! You listed your product. Now, see how easy it is to ship it when an order comes in.
+            </p>
+
+            <div class="btn-group">
+             <a href="shipping_demo.html" class="btn-primary">
+                👉 Start Shipping Demo
+             </a>
+
+             <a href="index.html" class="btn-secondary">
+                Back to Home
+             </a>
+
+             <button class="btn-secondary" onclick="nextStep(1)">Replay Listing Demo</button>
+            </div>
+          </div>
+        </div>
+
+    </div>
+
+    <script>
+        function nextStep(stepNum) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            const nextScreen = document.getElementById('step' + stepNum);
+            if (nextScreen) nextScreen.classList.add('active');
+        }
+        
+        // REMOVED: The position finding tool is deleted so the buttons work!
+    </script>
+</body>
+</html>
