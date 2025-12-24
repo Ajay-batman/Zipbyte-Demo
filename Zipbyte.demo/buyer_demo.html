@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Experience | ZipByte</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- Shared Styles --- */
+        :root {
+            --bg-color: #030712;
+            --accent-purple: #8b5cf6; 
+            --text-primary: #f8fafc;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 5px; 
+            overflow: hidden;
+            /* Subtle purple background glow */
+            background-image: radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.15) 0%, transparent 50%);
+        }
+
+        /* --- The Phone Frame --- */
+        .device-frame {
+            width: 340px;  /* Standard Mobile Width */
+            height: 690px; /* Standard Mobile Height */
+            background: #0f172a;
+            border: 8px solid #1e293b;
+            border-radius: 40px;
+            box-shadow: 0 0 50px rgba(139, 92, 246, 0.2);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Screens --- */
+        .screen {
+            width: 100%;
+            height: 100%;
+            display: none;
+            position: relative;
+        }
+        .screen.active { 
+            display: block; 
+            animation: fadeIn 0.4s ease; 
+        }
+        
+        .app-screenshot {
+            width: 100%;
+            height: 100%;
+            object-fit: fill; /* Ensures image fills the frame */
+            display: block;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* --- The Interactive Hotspot --- */
+        .hotspot {
+            position: absolute;
+            cursor: pointer;
+            z-index: 100;
+        }
+
+        /* --- The Blinker Animation --- */
+        .blinker {
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--accent-purple);
+            border-radius: 12px;
+            animation: pulse 1.5s infinite;
+            background: rgba(139, 92, 246, 0.1);
+            pointer-events: none;
+        }
+
+        @keyframes pulse { 
+            0% { transform: scale(0.95); opacity: 1; box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7); }
+            70% { transform: scale(1.05); opacity: 0; box-shadow: 0 0 0 15px rgba(139, 92, 246, 0); }
+            100% { transform: scale(0.95); opacity: 0; }
+        }
+
+        /* Guide Text Box at the bottom */
+        .guide-box {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.9);
+            padding: 12px 24px;
+            border-radius: 30px;
+            border: 1px solid var(--accent-purple);
+            color: var(--accent-purple);
+            font-size: 0.9rem;
+            text-align: center;
+            width: 85%;
+            pointer-events: none;
+            z-index: 200;
+        }
+        
+        /* --- Styles for Step 6 (Outro Page) --- */
+        .outro-container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(to bottom, #0f172a, #020617);
+            position: relative;
+            z-index: 10;
+        }
+
+        .glow-circle {
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, transparent 70%);
+            z-index: -1;
+            animation: pulseGlow 3s infinite ease-in-out;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+            50% { opacity: 1; transform: translateX(-50%) scale(1.2); }
+        }
+
+        .outro-container h1 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        .outro-text {
+            font-size: 1.1rem;
+            color: #e2e8f0;
+            margin-bottom: 20px;
+        }
+
+        .outro-subtext {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: var(--accent-purple);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+            transition: transform 0.2s;
+            display: block;
+        }
+
+        .btn-primary:active { transform: scale(0.98); }
+
+        .btn-secondary {
+            background: transparent;
+            color: #94a3b8;
+            border: 1px solid #334155;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-secondary:hover {
+            color: white;
+            border-color: var(--accent-purple);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="device-frame">
+
+        <div class="screen active" id="step1">
+            <img src="Home_page.png" alt="Home Screen" class="app-screenshot">
+            
+            <div class="hotspot" style="top: 34.0%; left: 53.2%; transform: translateX(-50%); width: 85%; height: 50px;" onclick="nextStep(2)">
+                <div class="blinker"></div>
+            </div>
+            <div class="guide-box">Welcome! Click "Explore Now" to start.</div>
+        </div>
+
+        <div class="screen" id="step2">
+            <img src="Product_details_page.png" alt="Product Screen" class="app-screenshot">
+            
+            <div class="hotspot" style="top: 82.3%; left: 77.2%; width: 78.10px; height: 50px;" onclick="nextStep(3)">
+                <div class="blinker"></div>
+            </div>
+            <div class="guide-box"style="bottom: 18.50px;">Check details. Click "Buy" to add to cart.</div>
+        </div>
+
+        <div class="screen" id="step3">
+            <img src="cart_view_page.png" alt="Cart Screen" class="app-screenshot">
+            
+            <div class="hotspot" style="top: 74.10%; left: 48.9%; transform: translateX(-50%); width: 90%; height: 60px;" onclick="nextStep(4)">
+                <div class="blinker"></div>
+            </div>
+            <div class="guide-box">Review your cart. Click "Checkout Now".</div>
+        </div>
+
+        <div class="screen" id="step4">
+            <img src="checkout_page.png" alt="Checkout Screen" class="app-screenshot">
+            
+            <div class="hotspot" style="top: 84.50%; left: 48.60%; transform: translateX(-50%); width: 90%; height: 60px;" onclick="nextStep(5)">
+                <div class="blinker"></div>
+            </div>
+            <div class="guide-box"style="bottom: 15px;">Confirm delivery info. Click to Pay.</div>
+        </div>
+
+        <div class="screen" id="step5">
+            <img src="Payment_sucess_page.png" alt="Success Screen" class="app-screenshot">
+            
+            <div class="hotspot" style="top: 82.5%; left: 49.3%; transform: translateX(-50%); width: 60%; height: 50px;" onclick="nextStep(6)">
+                <div class="blinker"></div>
+            </div>
+            <div class="guide-box"style="bottom: 12.70px;">Order Placed! Click to return to Home.</div>
+        </div>
+
+        <div class="screen" id="step6">
+           <div class="outro-container">
+            <div class="glow-circle"></div>
+             <h1>That was <span style="color: var(--accent-purple);">ZipByte.</span></h1>
+        
+             <p class="outro-text">
+               You just experienced the future of wholesale sourcing—fast, transparent, and effortless.
+            </p>
+
+             <p class="outro-subtext">
+             We are working hard to bring this ecosystem to life for you. 
+             We look forward to welcoming you onboard when we launch! 🚀
+            </p>
+
+          <div class="btn-group">
+            <a href="index.html" class="btn-primary">Back to Landing Page</a>
+            <button class="btn-secondary" onclick="nextStep(1)">Replay Demo</button>
+          </div>
+         </div>
+        </div>
+
+    </div>
+
+    <script>
+        function nextStep(stepNum) {
+            // Remove active class from all screens
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            
+            // Add active class to the next screen
+            const nextScreen = document.getElementById('step' + stepNum);
+            if (nextScreen) {
+                nextScreen.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
